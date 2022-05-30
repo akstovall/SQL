@@ -1,0 +1,36 @@
+/**Database for a hypothetical craft store: 
+craft_category to include sewing, painting, fiber arts, jewelry, floral
+item details the specific item: paint, canvas, yarn, knitting needles, etc.
+item_type to include materials and tools (ex. yarn is a material, crochet hook is a tool)
+in_stock details how many items are currently in stock 
+sold_per_week details how many of an item is sold a week on average 
+price details how much an item costs 
+**/
+
+CREATE TABLE craft_store (id INTEGER PRIMARY KEY, craft_category TEXT, item TEXT, item_type TEXT, price INTEGER, in_stock INTEGER, sold_per_week INTEGER );
+insert into craft_store values (1, 'fiber arts', 'yarn', 'materials', 4, 200, 75);
+insert into craft_store values (2, 'painting', 'easel', 'tools', 30, 5, 2);
+insert into craft_store values (3, 'sewing', 'thread', 'materials', 3, 300, 62);
+insert into craft_store values (4, 'sewing', 'bobbin', 'tools', 4, 83, 9);
+insert into craft_store values (5, 'fiber arts', 'knitting needles', 'tools', 10, 20, 6);
+insert into craft_store values (6, 'painting', 'canvas', 'materials', 20, 50, 14);
+insert into craft_store values (7, 'jewelry', 'beads', 'materials', 8, 45, 19);
+insert into craft_store values (8, 'painting', 'acrylic paint', 'materials', 6, 500, 150);
+insert into craft_store values (9, 'floral', 'flowers', 'materials', 10, 100, 30);
+insert into craft_store values (10, 'fiber arts', 'crochet hook', 'tools', 5, 56, 12);
+insert into craft_store values (11, 'painting', 'watercolor paint', 'materials', 10, 23, 5);
+insert into craft_store values (12, 'beading', 'cord', 'material', 9, 13, 2);
+insert into craft_store values (13, 'sewing', 'measuring tape', 'tools', 5, 7, 2);
+insert into craft_store values (14, 'sewing', 'sewing needles', 'tools', 6, 15, 3);
+insert into craft_store values (15, 'painting', 'paper', 'materials', 5, 10, 3);
+insert into craft_store values (16, 'sewing', 'fabric', 'materials', 3, 400, 78);
+insert into craft_store values (17, 'floral', 'vases', 'materials', 14, 22, 6);
+insert into craft_store values (18, 'sewing', 'embroidery hoop', 'tools', 5, 13, 4);
+insert into craft_store values (19, 'sewing', 'sewing pins', 'tools', 6, 25, 10);
+insert into craft_store values (20, 'painting', 'paintbrush', 'tools', 2, 54, 17);
+
+select * from craft_store; 
+select item from craft_store where price > 10;
+select item from craft_store where craft_category = 'fiber arts' and sold_per_week > 20;
+select * from craft_store order by price asc;
+select * from craft_store order by sold_per_week desc;
