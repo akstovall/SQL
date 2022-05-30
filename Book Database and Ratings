@@ -1,0 +1,10 @@
+--create a database of books and how I rate them out of 5
+
+CREATE TABLE books (id INTEGER PRIMARY KEY, name TEXT, rating INTEGER);
+
+INSERT INTO books VALUES (1, "The Hobbit", 5);
+INSERT INTO books VALUES (2, "A Tale of Two Cities", 4);
+INSERT INTO books VALUES (3, "Hitchhiker's Guide to the Galaxy", 3);
+INSERT INTO books VALUES (4, "The Lion, the Witch, and the Wardrobe", 4);
+INSERT INTO books VALUES (5, "The Da Vinci Code", 2);
+INSERT INTO books VALUES (6, "The Hot Zone", 5);
