@@ -1,0 +1,74 @@
+/* table of eight graduate students, their emails, their departments of study, and ID numbers for their professors 
+
+Using these to practice table joins*/
+
+/* table of grad students */  
+CREATE TABLE grad_students (id INTEGER PRIMARY KEY,
+    student_name TEXT,
+    student_email TEXT,
+    department TEXT,
+    prof_id integer);
+INSERT INTO grad_students (student_name, student_email, department, prof_id)
+    VALUES ('Anna', 'anna.stov@uni.edu', 'Microbiology', 1);
+INSERT INTO grad_students (student_name, student_email, department, prof_id)
+    VALUES ('James', 'james.smith@uni.edu', 'Biochemistry', 2);
+INSERT INTO grad_students (student_name, student_email, department, prof_id)
+    VALUES ('Beatrice', 'beatrice.patt@uni.edu', 'Neuroscience', 3);
+INSERT INTO grad_students (student_name, student_email, department, prof_id)
+    VALUES ('Mark', 'mark.fred@uni.edu', 'Microbiology', 1);
+INSERT INTO grad_students (student_name, student_email, department, prof_id)
+    VALUES ('Roxanne', 'roxanne.anders@uni.edu', 'Genetics', 4);
+INSERT INTO grad_students (student_name, student_email, department, prof_id)
+    VALUES ('Lester', 'lester.richards@uni.edu', 'Biochemistry', 2);
+INSERT INTO grad_students (student_name, student_email, department, prof_id)
+    VALUES ('William', 'william.munson@uni.edu', 'Neuroscience', 5);
+INSERT INTO grad_students (student_name, student_email, department, prof_id)
+    VALUES ('Hayley', 'hayley.cooper@uni.edu', 'Genetics', 4);
+ 
+/* table of professors overseeing the grad students' research */    
+CREATE TABLE professors (id INTEGER PRIMARY KEY,
+    name TEXT,
+    department TEXT,
+    email TEXT);
+insert into professors (name, department, email) values ('I.M.A. Funguy', 'Microbiology', 'funguy@uni.edu');
+insert into professors (name, department, email) values ('M. Eno', 'Biochemistry', 'eno@uni.edu');
+insert into professors (name, department, email) values ('Matt Grey', 'Neuroscience', 'greymatter@uni.edu');
+insert into professors (name, department, email) values ('Gene X. Preshion', 'Genetics', 'genex@uni.edu');
+insert into professors (name, department, email) values ('Matt White', 'Neuroscience', 'whitematter@uni.edu');
+
+/* table of research projects */ 
+CREATE TABLE research_projects (id INTEGER PRIMARY KEY,
+    department TEXT,
+    project_name TEXT,
+    student_id integer);
+insert into research_projects (department, project_name, student_id) values ('Microbiology', 'Spores vs Immune Cells', '4');
+insert into research_projects (department, project_name, student_id) values ('Neuroscience', 'The Brain Before and After Learning SQL', '7');
+insert into research_projects (department, project_name, student_id) values ('Biochemistry', 'Folding Proteins like Laundry', '6');
+insert into research_projects (department, project_name, student_id) values ('Genetics', 'Hidden Secrets of Histones', '5');
+insert into research_projects (department, project_name, student_id) values ('Neuroscience', 'Ax-on, Ax-off', '3');
+insert into research_projects (department, project_name, student_id) values ('Biochemistry', 'Putting the pH in PhD', '2');
+insert into research_projects (department, project_name, student_id) values ('Microbiology', 'How did COVID Go Viral?', '1');
+insert into research_projects (department, project_name, student_id) values ('Genetics', 'From DNA to RNA and Everything in Between', '8');
+
+/* first I want to match each student to their professors */
+select grad_students.student_name, grad_students.department, professors.name
+    from grad_students
+    outer left join professors
+    on grad_students.prof_id = professors.id
+    order by professors.department;
+
+/*next I want to match each student to their project*/
+select grad_students.student_name, grad_students.student_email, grad_students.department, research_projects.project_name
+    from grad_students
+    join research_projects
+    on grad_students.id = research_projects.student_id
+    order by grad_students.department;
+    
+/*next I want to match professors to the projects they oversee
+step 1: join professors to students, step 2: join to projects*/
+select professors.name as professor, research_projects.project_name as project
+    from professors
+    join grad_students
+    on grad_students.prof_id = professors.id
+    join research_projects
+    on research_projects.student_id = grad_students.id 
