@@ -22,3 +22,6 @@ select * from FebSales;
 select count(customers.acctnum) as total_customers_feb, avg(quantity)*price as avg_per_customer from FebSales
 left join customers on FebSales.orderID = customers.order_id
 where FebSales.quantity > 2;
+
+/*List all the products sold in Los Angeles in February, and include how many of each were sold.*/
+select product, sum(quantity) from FebSales where location like '%Los Angeles%' group by product;
