@@ -1,0 +1,24 @@
+/*How many orders were placed in January?*/
+select count(orderID) from JanSales;
+
+/*How many of those orders were for an iPhone?*/
+select count(*) from JanSales where product = 'iPhone';
+
+/*Select the customer account numbers for all the orders that were placed in February*/
+select customers.acctnum, product from FebSales
+inner join customers
+on customers.order_id = FebSales.orderID
+group by acctnum;
+
+/*What is the total revenue for each product sold in January?*/
+select product, sum(quantity)*price as revenue from JanSales
+group by product, price;
+
+/*Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?*/
+select product, sum(quantity)*price as revenue, location from FebSales where location = '548 Lincoln St, Seattle, WA 98101';
+
+/*How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?*/
+select * from FebSales;
+select count(customers.acctnum) as total_customers_feb, avg(quantity)*price as avg_per_customer from FebSales
+left join customers on FebSales.orderID = customers.order_id
+where FebSales.quantity > 2;
