@@ -1,0 +1,107 @@
+/*Show Customers (their full names, customer ID, and country) who are not in the US. (Hint: != or <> can be used to say "is not equal to").*/
+select * from customers where country != 'USA';
+
+/*Show only the Customers from Brazil.*/
+select FirstName, LastName from customers where country = 'Brazil';
+
+/*Find the Invoices of customers who are from Brazil. 
+The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.*/
+select * from customers where country = 'Brazil';
+select firstname, lastname, invoices.invoiceid, invoices.invoicedate, invoices.billingcountry from customers
+    left join invoices
+    on customers.customerid = invoices.customerid;
+
+/*Show the Employees who are Sales Agents.*/
+select * from employees where title like '%agent%';
+
+/*Find a unique/distinct list of billing countries from the Invoice table.*/
+select distinct billingcountry from invoices;
+
+/*Provide a query that shows the invoices associated with each sales agent. 
+The resulting table should include the Sales Agent's full name. */
+select * from employees where title = 'Sales Support Agent';
+/*Jane Peacock employee ID is 3
+Margaret Park employee ID is 4
+Steve Johnson employee ID is 5
+these numbers also appear in the SupportRepID column of the customers table
+invoices table also has customerID
+step 1: join invoices to customers
+step 2: join invoices+customers to employees*/
+select * from customers;
+select invoices.invoiceid as invoice_id, employees.firstname, employees.lastname
+    from invoices
+    left join customers on invoices.customerid = customers.customerid
+    left join employees on customers.supportrepid = employees.employeeid;
+    
+/*Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+info needed from customers db: CustomerID, FirstName, LastName, country, SupportRepID
+info needed from invoices db: customerID, total
+info needed from employees: EmployeeID, LastName, FirstName*/
+select customerid, firstname as customer_firstname, lastname as customer_lastname, country, invoices.invoiceid as invoice_id, invoices.total as total_invoiced, employees.firstname as SalesRep_firstname, employees.lastname as SalesRep_lastname
+    from customers
+    left join invoices on customers.customerid = invoices.customerid
+    left join employees on customers.supportrepid = employees.employeeid;
+    
+/*How many Invoices were there in 2009?*/
+select count(invoicedate) from invoices where invoicedate between '2009-01-01' and '2009-12-31';
+/*query resulted in 83 invoices in 2009*/
+
+/*What are the total sales for 2009?*/
+select sum(total) from invoices where invoicedate between '2009-01-01' and '2009-12-31';
+/*query resulted in 449.46*/
+
+/*Write a query that includes the purchased track name with each invoice line item*/
+/*invoice_items includes invoicelineid, invoiceid, trackid*/
+/*invoices includes invoiceid*/
+/*includes trackid, name*/
+select invoicelineid, tracks.name from invoice_items
+left join tracks on tracks.trackid = invoice_items.trackid;
+
+/*Write a query that includes the purchased track name AND artist name with each invoice line item.*/
+/*tracks contains trackid, name, albumID*/
+/*invoice_items includes invoicelineid, invoiceid, trackid*/
+/*artists contains artistid, name*/
+/*album contains albumID and artistID*/
+/*step 1: join tracks to album on albumID
+step 2: join tracks+album to artists on artistID
+step 3: join tracks+album+artists to invoice_items on trackID */
+select name as track_name, artists.name as artist_name, invoice_items.invoiceID from tracks
+join albums on tracks.albumID = albums.albumID
+join artists on albums.artistID = artists.artistID
+join invoice_items on tracks.trackID = invoice_items.trackID;
+
+/*Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.*/
+/*tracks contains trackid, name, albumID, genreID, MediaType*/
+/*genres includes genreID, name*/
+/*media_types includes MediaTypeID and name*/
+/*album contains albumID and artistID*/
+/*step 1: join tracks and album
+step 2: join tracks+albums with media_types
+step 3: join tracks+albums+media_types with genres*/
+select name as song_name, albums.title as album_title, media_types.name as media_type, genres.name as genre
+from tracks
+join albums on tracks.albumID = albums.albumID
+join media_types on tracks.MediaTypeID = media_types.MediaTypeID
+join genres on tracks.genreID = genres.genreID;
+
+/*Show the total sales made by each sales agent.*/
+/*employees contains lastname, firstname, employeeID*/
+/*invoices contains invoiceID, customerID, total
+customers contains customerID, SupportRepID
+step 1: join employees to customers
+step 2: join employees+customers to invoices*/
+select employees.firstname as agent_firstname, employees.lastname as agent_lastname, round(sum(invoices.total)) as total
+    from employees
+    join customers on employees.employeeID = customers.SupportRepId
+    join invoices on customers.customerID = invoices.customerID
+    group by employees.firstname;
+    
+/*Which sales agent made the most in sales in 2009?*/
+select firstname as agent_firstname, lastname as agent_lastname, round(sum(invoices.total), 2) as total_sales
+from employees
+join customers on employees.employeeID = customers.SupportRepID
+join invoices on customers.customerID = invoices.customerID
+where employees.title = 'Sales Support Agent' and invoices.invoicedate like '%2009%'
+group by employees.firstname
+order by total_sales desc limit 1;
+
