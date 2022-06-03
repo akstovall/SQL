@@ -1,3 +1,6 @@
+/*exercise in learning SQL
+data courtesy of Charlotte Chaze as part of her BreakIntoTech Data Analytics course*/
+
 /*Show Customers (their full names, customer ID, and country) who are not in the US. (Hint: != or <> can be used to say "is not equal to").*/
 select * from customers where country != 'USA';
 
