@@ -1,0 +1,39 @@
+/*shows data for COVID vaccinations by country*/
+/*data from "COVID-19 World Vaccination Progress" by Gabriel Preda on Kaggle*/
+select * from COVID_vaccinations;
+/*I like to start with a 'select * from database' statement to look at the table and get an idea of what kind of data it has*/
+
+/*how many sources reporting data in this database?*/
+select distinct source_name from COVID_vaccinations;
+/*this query returned 81 sources*/
+
+/*total number of countries reporting data?*/
+select count(distinct(country)) as total_countries from COVID_vaccinations;
+/*query returned 223 countries*/
+
+/*for how many countries does the WHO report data?*/
+select distinct country from COVID_vaccinations where source_name = 'World Health Organization';
+/*this query returned 74 sources*/
+
+/*which countries administer the AstraZeneca vaccine?*/
+select country from COVID_vaccinations where vaccines like '%AstraZeneca%' group by country;
+/*returned a list of 183 countries*/
+
+/*most recent date in the database?*/
+select max(date) from COVID_vaccinations;
+/*query returend 2022-03-29?*/
+/*how many countries report data on this date?*/
+select country from COVID_vaccinations where date = '2022-03-29'; 
+/*returned 54 countries*/
+
+/*average daily vaccinations per million on 2022-03-29 in the countries reporting data?*/
+select avg(daily_vaccinations_per_million) from COVID_vaccinations where date = '2022-03-29';
+/*query returned 1681.5*/
+
+/*for which dates are there data recorded for vaccinations in the United States?*/
+select country, date from COVID_vaccinations where country = 'United States';
+/*returned 12-13-2020 to 3-28-2022*/
+
+/*total vaccinations in the United States during this time frame?*/
+select total_vaccinations from COVID_vaccinations where country = 'United States' and date like '2022%' order by total_vaccinations desc limit 1;
+/*the total_vaccinations column is a record of all vaccinations given in the country on that given date; it is a metric of doses administered, not how many people are fully vaccinated*/
